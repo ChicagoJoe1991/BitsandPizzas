@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.content.Intent;
 
 public class MainActivity extends Activity {
 
@@ -34,6 +35,8 @@ public class MainActivity extends Activity {
         switch (item.getItemId()){
             case R.id.action_create_order:
                 //code to run when the create order item is clicked
+                Intent intent = new Intent(this, OrderActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.action_settings:
                 //code to run when the settings item is clicked
@@ -42,4 +45,5 @@ public class MainActivity extends Activity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
 }
