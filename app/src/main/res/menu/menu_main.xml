@@ -10,7 +10,7 @@
     <item
         android:id="@+id/action_create_order"
         android:title="@string/action_create_order"
-        android:icon="@drawable/ic_action_new_event"
+        android:icon="@mipmap/ic_action_new_event"
         android:orderInCategory="1"
         app:showAsAction="ifRoom"
         />
