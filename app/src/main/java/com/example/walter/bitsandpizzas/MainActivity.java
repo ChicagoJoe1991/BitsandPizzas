@@ -3,8 +3,10 @@ package com.example.walter.bitsandpizzas;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
@@ -20,6 +22,7 @@ public class MainActivity extends Activity {
     private DrawerLayout drawerLayout;
     private String[] titles;
     private ListView drawerList;
+    private ActionBarDrawerToggle drawerToggle;
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
@@ -43,6 +46,29 @@ public class MainActivity extends Activity {
         if(savedInstanceState == null){
             selectItem(0);
         }
+        drawerToggle = new ActionBarDrawerToggle(
+                this,
+                drawerLayout,
+                R.string.open_drawer,
+                R.string.close_drawer){
+            //called when a drawer has settled in a completely closed state
+            @Override
+            public void onDrawerClosed(View view){
+                super.onDrawerClosed(view);
+                //code to run when the drawer is closed
+                invalidateOptionsMenu();
+            }
+            @Override
+            public void onDrawerOpened(View drawerView){
+                super.onDrawerOpened(drawerView);
+                //code to run when the drawer is open
+                invalidateOptionsMenu();
+            }
+        };
+        drawerLayout.setDrawerListener(drawerToggle);
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
     }
 
     @Override
@@ -92,10 +118,20 @@ public class MainActivity extends Activity {
         getActionBar().setTitle(title);
     }
 
+    @Override
+    //called whenever we call invalidateOptionsMenu()
+    public boolean onPrepareOptionsMenu(Menu menu){
+        //If the drawer is open, hide action items related to the content view
+        boolean drawerOpen = drawerLayout.isDrawerOpen(drawerList);
+        menu.findItem(R.id.share_action).setVisible(!drawerOpen);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+
     private void setIntent(String text){
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
-        intent.putExtra(intent.EXTRA_TEXT, text);
+        intent.putExtra(Intent.EXTRA_TEXT, text);
         shareActionProvider.setShareIntent(intent);
     }
 
@@ -104,6 +140,9 @@ public class MainActivity extends Activity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        if(drawerToggle.onOptionsItemSelected(item)){
+            return true;
+        }
         switch (item.getItemId()){
             case R.id.action_create_order:
                 //code to run when the create order item is clicked
@@ -116,6 +155,17 @@ public class MainActivity extends Activity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState){
+        super.onPostCreate(savedInstanceState);
+        //sync the toggle state after onRestoreInstanceState has occured
+        drawerToggle.syncState();
+    }
+    @Override
+    public void onConfigurationChanged(Configuration newConfig){
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
     }
 
 }
