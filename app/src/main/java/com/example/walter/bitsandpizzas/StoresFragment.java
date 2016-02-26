@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 
-public class PizzaFragment extends ListFragment {
+public class StoresFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -16,7 +16,7 @@ public class PizzaFragment extends ListFragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 inflater.getContext(),
                 android.R.layout.simple_list_item_1,
-                getResources().getStringArray(R.array.pizzas));
+                getResources().getStringArray(R.array.stores));
         setListAdapter(adapter);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
