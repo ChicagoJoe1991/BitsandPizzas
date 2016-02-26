@@ -47,8 +47,9 @@ public class MainActivity extends Activity {
                 android.R.layout.simple_list_item_activated_1, titles));
         drawerList.setOnItemClickListener(new DrawerItemClickListener());
         //display the correct fragment
-        if(savedInstanceState == null){
-            selectItem(0);
+        if(savedInstanceState != null){
+            currentPosition = savedInstanceState.getInt("position");
+            setActionBarTitle(currentPosition);
         }else{
             selectItem(0);
         }
